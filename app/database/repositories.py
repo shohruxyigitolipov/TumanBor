@@ -4,7 +4,7 @@ from collections.abc import Sequence
 from sqlalchemy import select, delete, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.types import ModelType, SchemaType
+from app.obj_types import ModelType, SchemaType
 
 RepoType = TypeVar('RepoType', bound='BaseRepository')
 
