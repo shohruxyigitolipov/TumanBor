@@ -44,10 +44,11 @@ async def websocket_connection(websocket: WebSocket, device_id: int,
         return
     await ws_manager.connect(device_id=device_id, ws=websocket)
     print('Успешно подключено!')
+    await websocket.send_json({'success': 'Вы подключились'})
     try:
         while True:
             msg = await websocket.receive_text()
-            await websocket.send_text(f'Вы сказали: {msg}')
+            await ws_manager.send_personal(device_id, f"Вы сказали: {msg}")
     except WebSocketDisconnect:
         print(f"Device: {device_id} отключился")
 
