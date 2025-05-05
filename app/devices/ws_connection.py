@@ -8,15 +8,6 @@ class WSConnectionManager:
         self.active: dict[str, WebSocket] = {}
 
     async def connect(self, device_id: str, ws: WebSocket):
-        old_ws = self.active.get(device_id)
-
-        if old_ws and old_ws.application_state != WebSocketState.DISCONNECTED:
-            try:
-                await old_ws.close(code=4000, reason="Signed in elsewhere")
-            except Exception as e:
-                # логируем, но не прерываем
-                print(f"[WS] Error while closing old connection: {e}")
-
         self.active[device_id] = ws
 
     async def disconnect(self, device_id: str):
