@@ -1,5 +1,4 @@
-from app.orders.database.models import Order
-from app.orders.database.repositories import OrderRepository
+from app.orders.repositories import OrderRepository
 from app.services import BaseService
 
 class OrderService(BaseService[OrderRepository]):

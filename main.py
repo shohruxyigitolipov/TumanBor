@@ -2,12 +2,13 @@ from fastapi import FastAPI, WebSocket, Request
 from contextlib import asynccontextmanager
 
 from app.database.engine import init_db
-from app.devices.routers import router as device_rt
+from app.devices.device_routers import router as device_rt
 
 
 @asynccontextmanager
 async def lifespan(app1: FastAPI):
     await init_db()
+    from app.events import handlers
     yield
 
 

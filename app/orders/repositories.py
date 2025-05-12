@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.orders.database.models import Order
+from app.orders.models import Order
 from app.database.repositories import BaseRepository
 
 class OrderRepository(BaseRepository[Order]):

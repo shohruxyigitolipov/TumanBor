@@ -5,42 +5,60 @@ from datetime import datetime
 from enum import Enum
 from typing import List
 
+
+
+
 class DeviceCreate(BaseModel):
-    name: str = Field(..., example='raspberrypi4')
+    name: str
 
 
-class DeviceRegisterRequest(BaseModel):
-    registration_code: str = Field(..., example='abc')
-
-
-class DeviceRegisterResponse(BaseModel):
-    id: int
+class DeviceDataInfo(BaseModel):
+    registration_code: str
     auth_token: str
+
+    class Config:
+        from_attributes = True
 
 
 class DeviceInfo(BaseModel):
     id: int
     name: str
-    registration_code: str
-    auth_token: str
-    is_registered: bool
-    created_at: datetime
-    registered_at: datetime | None = None
-    last_seen: datetime | None = None
-    model_config = ConfigDict(from_attributes=True)
+    last_seen: str | None = None
+    data: DeviceDataInfo
+
+    class Config:
+        from_attributes = True
 
 
-class DeviceShort(BaseModel):
-    id: int
-    name: str
-    is_registered: bool
-    model_config = ConfigDict(from_attributes=True)
+class DeviceControl_response(BaseModel):
+    action: str
+    state: bool | int
+    device_id: int
+
+
+class DeviceStatus_response(BaseModel):
+    device_id: int
+    state: bool
 
 
 class Device(BaseModel):
-    id: int
-    name: str | None = None
-    status: int | bool = False
+    device_id: int
+
+
+class CommandResponse(Device):
+    success: bool
+    command: str
+
+
+class ErrorResponse(BaseModel):
+    error: str
+
+
+class ActiveDevicesResponse(BaseModel):
+    active_devices: list[int]
+
+    class Config:
+        arbitrary_types_allowed = True
 
 
 class Command(str, Enum):

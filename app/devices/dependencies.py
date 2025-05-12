@@ -3,8 +3,8 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database.engine import get_db
-from app.devices.database.repositories import DeviceRepository
-from app.devices.database.service import DeviceService
+from app.devices.device_repository import DeviceRepository
+from app.devices.device_service import DeviceService
 
 
 def get_device_repository(db: AsyncSession = Depends(get_db)) -> DeviceRepository:
