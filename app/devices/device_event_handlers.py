@@ -14,6 +14,9 @@ async def handle_disconnect(device_id):
     print(f"[{device_id}] Сессия завершена и удалена.❌")
     await ws_manager.disconnect(device_id)
 
+@event_bus.on('websocket_disconnected')
+async def handle_ws_disconnect(device_id):
+    print(f'[{device_id}] Websocket соединение потеряно.⛓️‍💥')
 
 @event_bus.on("message_from_device")
 async def handle_message(device_id, message):

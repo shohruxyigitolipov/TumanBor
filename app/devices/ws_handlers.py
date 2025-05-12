@@ -32,7 +32,9 @@ class WebSocketHandler:
                 event_bus.emit('message_from_device', device_id, msg)
 
         except WebSocketDisconnect:
-            event_bus.emit('device_disconnected', device_id)
+            event_bus.emit('websocket_disconnected', device_id)
+            await asyncio.sleep(1)
+            return
 
 
 websocket_handler = WebSocketHandler
