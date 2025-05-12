@@ -2,7 +2,7 @@ import asyncio
 from datetime import datetime, timedelta
 
 from app.events.emitters import event_bus
-from typing import Dict
+from typing import Dict, List
 from fastapi import WebSocket
 
 
@@ -29,8 +29,9 @@ class WSConnectionManager:
             return None
         return websocket
 
-    async def get_list(self) -> Dict:
-        return self.active
+    async def get_list(self) -> List:
+        ids = [i for i in self.active.keys()]
+        return ids
 
     async def send_personal(self, device_id: str, message: str) -> bool:
         ws = self.active.get(device_id)

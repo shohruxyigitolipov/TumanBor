@@ -53,42 +53,6 @@ class DeviceService(BaseService[DeviceRepository]):
         return websocket
 
     @staticmethod
-    async def control_device(device_id: int, device_type: str, state: bool = None,
-                             start_time: str = None, stop_time: str = None):
-        """
-        Управлять устройством через WebSocket.
-
-        Поддерживает:
-        - установку таймера (start_time и stop_time)
-        - включение/выключение устройства (state)
-        - очистку таймера
-
-        :param device_id: ID устройства.
-        :param device_type: Тип устройства.
-        :param state: Целевое состояние (вкл/выкл).
-        :param start_time: Время включения.
-        :param stop_time: Время выключения.
-        :return: Результат действия и текущее состояние.
-        """
-        try:
-            websocket = await DeviceService.get_websocket_or_404(device_id)
-        except Exception as e:
-            print(f'Ошибка Websocket, {e}')
-            return 'Не удалось найти соединений', state
-
-        device = DeviceCommands(device_type=device_type, device_id=device_id, websocket=websocket)
-
-        if start_time and stop_time:
-            await device.set_timer(start_time=start_time, stop_time=stop_time)
-            return 'Set timer', state
-        elif state is not None:
-            await device.set_state(state=state)
-            return 'Set state', state
-        else:
-            await device.clear_timer()
-            return 'Clear timer', 0
-
-    @staticmethod
     async def get_device_status(device_id: int, device_type: str) -> bool:
         """
         Получить текущее состояние устройства через WebSocket.

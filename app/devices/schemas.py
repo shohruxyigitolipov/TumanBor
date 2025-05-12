@@ -55,7 +55,7 @@ class ErrorResponse(BaseModel):
 
 
 class ActiveDevicesResponse(BaseModel):
-    active_devices: list[int]
+    active_devices: List[int]
 
     class Config:
         arbitrary_types_allowed = True

@@ -42,6 +42,7 @@ async def get_device_status_r(device_id: int,
 @router.get('/active', response_model=ActiveDevicesResponse, summary='Список активных устройств')
 async def active_devices(service: DeviceService = Depends(get_device_service)):
     device_ids = await service.get_active_devices()
+    print(device_ids)
     return ActiveDevicesResponse(active_devices=device_ids)
 
 
