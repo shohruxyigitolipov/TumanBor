@@ -1,8 +1,18 @@
-from fastapi import FastAPI, WebSocket, Request
+from fastapi import FastAPI, Request
 from contextlib import asynccontextmanager
 
 from app.database.engine import init_db
 from app.devices.device_routers import router as device_rt
+from config import LoggingSettings
+from logger_module.logging_config import LoggingConfig
+import logging
+
+settings = LoggingSettings()  # прочитает .env автоматически
+LoggingConfig(settings).setup()
+
+
+def get_logger(name: str = __name__) -> logging.Logger:
+    return logging.getLogger(name)
 
 
 @asynccontextmanager
