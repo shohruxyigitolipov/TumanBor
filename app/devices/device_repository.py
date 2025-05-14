@@ -1,6 +1,7 @@
 # device_repository
 from app.database.repositories import BaseRepository
-from app.devices.device_models import Device, DeviceDatas, Order
+from app.devices.device_models import Device, DeviceDatas
+from app.orders.models import OrderInfo
 from app.obj_types import SchemaType
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -38,17 +39,14 @@ class DeviceRepository(BaseRepository[Device]):
 
     async def get_all_devices(self) -> Sequence[Device]:
         stmt = select(Device).options(
-            selectinload(Device.data),
-            selectinload(Device.order))
-
+            selectinload(Device.data))
         result = await self.session.execute(stmt)
         devices = result.scalars().all()
         return devices
 
     async def get_filtered_sorted(self, name: str = None, sort: str = None) -> Sequence[Device]:
         stmt = select(Device).options(
-            selectinload(Device.data),
-            selectinload(Device.order))
+            selectinload(Device.data))
         if name:
             stmt = stmt.where(Device.name.ilike(f'%{name}%'))
         if sort:
@@ -64,6 +62,3 @@ class DeviceRepository(BaseRepository[Device]):
         return result.scalars().all()
 
 
-class OrderRepository(BaseRepository[Order]):
-    def __init__(self, session: AsyncSession):
-        super().__init__(Order, session)
