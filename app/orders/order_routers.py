@@ -29,12 +29,12 @@ class ParsedData(BaseModel):
 async def do_order(data):
     if not data.device_id and data.status:
         return
-    event_bus.emit('got_order', data.device_id, data.amount)
+    event_bus.emit('got_order', data.device_id, data.amount, data.transaction_id)
 
 
 @event_bus.on('got_order')
-async def handle_order(device_id, amount):
-    message = f"PAYMENT_OK:{amount}"
+async def handle_order(device_id, amount, transaction_id):
+    message = f"PAYMENT_OK:{1},{transaction_id}"
     await ws_manager.send_personal(device_id, message=message)
 
 
