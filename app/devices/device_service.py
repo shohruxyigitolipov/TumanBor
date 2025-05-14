@@ -4,6 +4,10 @@ from fastapi import WebSocket, HTTPException, status
 from app.devices.device_repository import DeviceRepository
 from app.devices.ws_connection import ws_manager
 from app.services import BaseService
+from logger_module.logging_utils import get_logger_factory
+
+get_logger = get_logger_factory(__name__)
+logger = get_logger()
 
 
 class DeviceService(BaseService[DeviceRepository]):
@@ -79,3 +83,5 @@ class DeviceService(BaseService[DeviceRepository]):
         if device and device.id == device_id:
             return True
         return False
+
+

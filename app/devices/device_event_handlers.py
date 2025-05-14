@@ -36,6 +36,11 @@ async def handle_message_to_device(device_id, message):
     logger.info(f'{device_id}, Отправлено сообщение: {message}')
 
 
+@event_bus.on('message_failed')
+async def handle_failed_msg(device_id, message):
+    logger.info(f'{device_id}, Сообщение: "{message}" возможно не дошло до устройства')
+
+
 @event_bus.on('device_timeout')
 async def handle_timeout(device_id, last_pong_time):
     logger.info(f'Текущее время: {datetime.datetime.now()}\n'
@@ -62,5 +67,3 @@ async def handle_session_end(device_id):
 async def handle_auth_token_wrong(device_id):
     logger.info(f'[{device_id}], Неверный auth_token.')
     await ws_manager.send_personal(device_id, message='Неверный auth_token')
-
-

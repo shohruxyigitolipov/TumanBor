@@ -40,6 +40,7 @@ class WSConnectionManager:
             event_bus.emit('message_to_device', device_id, message)
             return True
         else:
+            event_bus.emit('message_failed', device_id, message)
             return False
 
 

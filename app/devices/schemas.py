@@ -2,10 +2,9 @@ from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime
+from app.devices.device_models import Device
 from enum import Enum
 from typing import List
-
-
 
 
 class DeviceCreate(BaseModel):
@@ -23,11 +22,9 @@ class DeviceDataInfo(BaseModel):
 class DeviceInfo(BaseModel):
     id: int
     name: str
-    last_seen: str | None = None
+    last_seen: datetime | None = None
     data: DeviceDataInfo
-
-    class Config:
-        from_attributes = True
+    order_id: int | None = None
 
 
 class DeviceControl_response(BaseModel):

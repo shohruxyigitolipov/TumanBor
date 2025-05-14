@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from app.database.engine import init_db
 from app.devices.device_routers import router as device_rt
+from app.orders.order_routers import router as order_rt
 from config import LoggingSettings
 from logger_module.logging_config import LoggingConfig
 import logging
@@ -24,6 +25,7 @@ async def lifespan(app1: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(device_rt)
+app.include_router(order_rt)
 
 
 @app.get('/')

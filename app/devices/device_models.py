@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.engine import Base
-from sqlalchemy import String, Boolean, DateTime, ForeignKey
+from sqlalchemy import String, Boolean, DateTime, ForeignKey, Date, Time
 import datetime
 from sqlalchemy.orm import relationship
 
@@ -32,3 +32,4 @@ class DeviceDatas(Base):
     registration_code: Mapped[str] = mapped_column(String, unique=True, default=generate_registration_code)
     auth_token: Mapped[str] = mapped_column(String, unique=True, default=generate_auth_token)
     device: Mapped["Device"] = relationship("Device", back_populates="data")
+
