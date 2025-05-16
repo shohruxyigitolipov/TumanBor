@@ -6,6 +6,7 @@ from app.devices.ws_connection import ws_manager
 from app.orders.parsers import PaymentInfoParser
 from app.events.emitters import event_bus
 from logger_module.logging_utils import get_logger_factory
+import uuid
 
 get_logger = get_logger_factory(__name__)
 logger = get_logger()
@@ -17,6 +18,10 @@ class OrderText(BaseModel):
     text: str
 
 
+class ReportData(BaseModel):
+    data: str
+
+
 class ParsedData(BaseModel):
     device_id: int
     payment_name: str
@@ -26,21 +31,21 @@ class ParsedData(BaseModel):
     transaction_id: int
 
 
-async def do_order(data):
-    if not data.device_id and data.status:
-        return
-    event_bus.emit('got_order', data.device_id, data.amount, data.transaction_id)
-
-
-@event_bus.on('got_order')
-async def handle_order(device_id, amount, transaction_id):
-    message = f"PAYMENT_OK:{1},{transaction_id}"
-    await ws_manager.send_personal(device_id, message=message)
-
-
-@router.post('/new', response_model=ParsedData)
+@router.post('/new')
 async def get_order(request: OrderText):
     parsed_dict = PaymentInfoParser(text=request.text).parse()
     data = ParsedData(**parsed_dict)
-    await do_order(data)
-    return data
+    if not data.device_id and data.status:
+        print('...')
+        return data
+    request_id = str(uuid.uuid4())
+    message = {"cmd": f"PAYMENT_OK:{1}",
+               f"request_id": f"{request_id}"}
+    response = await ws_manager.send_personal(data.device_id, message=message, request_id=request_id, timeout=30)
+    logger.info(f'Получил ответ на запрос({message}: [{response}]')
+    return response
+
+
+@router.post('/report')
+async def report_order(request: ReportData):
+    pass

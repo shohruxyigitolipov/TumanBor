@@ -1,11 +1,14 @@
+from asyncio import Queue
+
 from app.devices.ws_connection import ws_manager
 from app.events.emitters import event_bus
 import datetime
-from fastapi import Depends
 from logger_module.logging_utils import get_logger_factory
 
 get_logger = get_logger_factory(__name__)
 logger = get_logger()
+
+
 
 
 @event_bus.on("device_connected")
@@ -28,7 +31,8 @@ async def handle_ws_disconnect(device_id):
 @event_bus.on("message_from_device")
 async def handle_message(device_id, message):
     logger.info(f"📨 {device_id} прислал: {message}")
-    await ws_manager.send_personal(device_id, f"Вы сказали: {message}")
+    # await ws_manager.send_personal(device_id=device_id, message=f"Вы сказали: {message}")
+    await ws_manager.set_response(device_id=int(device_id), message=message)
 
 
 @event_bus.on('message_to_device')
