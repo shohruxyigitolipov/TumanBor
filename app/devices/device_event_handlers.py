@@ -9,8 +9,6 @@ get_logger = get_logger_factory(__name__)
 logger = get_logger()
 
 
-
-
 @event_bus.on("device_connected")
 async def handle_connect(device_id):
     logger.info(f'✅ Устройство {device_id} подключено.')
